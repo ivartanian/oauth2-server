@@ -1,0 +1,13 @@
+.idea/
+*.iml
+*.iws
+*.ipr
+build/
+.gradle
+
+gradlew
+gradlew.bat
+gradle
+
+# Mac
+.DS_Store
