@@ -1,0 +1,88 @@
+package uk.co.caeldev.oauthserver.builders;
+
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Lists;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import uk.co.caeldev.oauthserver.persisters.Persister;
+import uk.co.caeldev.springsecuritymongo.domain.User;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
+public class UserBuilder implements Builder<User> {
+
+    private UUID userUUID = UUID.randomUUID();
+    private boolean accountNonExpired;
+    private boolean accountNonLocked;
+    private boolean credentialsNonExpired;
+    private boolean enabled;
+    private String username;
+    private String password;
+    private Set<GrantedAuthority> grantedAuthorities;
+
+    private UserBuilder() {
+    }
+
+    public static UserBuilder userBuilder() {
+        return new UserBuilder();
+    }
+
+    public User build() {
+        return new User(password, username, userUUID, grantedAuthorities, accountNonExpired, accountNonLocked, credentialsNonExpired, enabled);
+    }
+
+    @Override
+    public User persist(Persister persister) {
+        return persister.persist(build());
+    }
+
+    public UserBuilder username(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public UserBuilder password(String password) {
+        this.password = password;
+        return this;
+    }
+
+    public UserBuilder accountNonExpired(boolean accountNonExpired) {
+        this.accountNonExpired = accountNonExpired;
+        return this;
+    }
+
+    public UserBuilder accountNonLocked(boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+        return this;
+    }
+
+    public UserBuilder credentialsNonExpired(boolean credentialsNonExpired) {
+        this.credentialsNonExpired = credentialsNonExpired;
+        return this;
+    }
+
+    public UserBuilder enabled(boolean enabled) {
+        this.enabled = enabled;
+        return this;
+    }
+
+    public UserBuilder grantedAuthorities(String... grantedAuthorities) {
+        List<String> grantedAuthoritiesString = Lists.newArrayList(grantedAuthorities);
+        this.grantedAuthorities = FluentIterable.from(grantedAuthoritiesString).transform(toGrantedAuthority()).toSet();
+        return this;
+    }
+
+    private Function<String, GrantedAuthority> toGrantedAuthority() {
+        return new Function<String, GrantedAuthority>() {
+            @Nullable
+            @Override
+            public GrantedAuthority apply(String input) {
+                    return new SimpleGrantedAuthority(input);
+            }
+        };
+    }
+}

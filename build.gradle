@@ -1,0 +1,87 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'war'
+apply plugin: 'spring-boot'
+apply plugin: 'pl.allegro.tech.build.axion-release'
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("pl.allegro.tech.build:axion-release-plugin:${axionReleasePluginVersion}")
+    }
+}
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+group = 'uk.co.caeldev'
+
+repositories {
+  jcenter()
+  mavenCentral()
+  maven {
+    url "https://oss.sonatype.org/content/repositories/snapshots"
+  }
+}
+
+configurations.all {
+  // check for updates every build
+  resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+scmVersion {
+    tag {
+        prefix = 'RELEASE'
+    }
+}
+
+version = scmVersion.version
+
+war {
+    baseName = rootProject.name
+    version = version
+}
+
+configurations {
+    providedRuntime
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.springframework.boot:spring-boot-starter-aop")
+    compile("org.springframework.boot:spring-boot-starter-data-mongodb")
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.springframework.boot:spring-boot-starter-data-rest")
+    compile("org.springframework.hateoas:spring-hateoas")
+    compile("org.springframework.security:spring-security-jwt")
+    compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity3")
+    compile("com.google.guava:guava:${guavaVersion}")
+    compile("org.springframework.security.oauth:spring-security-oauth2:${springSecurityOauth2Version}")
+    compile("com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}")
+    compile("joda-time:joda-time:${jodaTimeVersion}")
+    compile("uk.co.caeldev:spring-security-mongo:${springSecurityMongoVersion}")
+    compile("org.webjars:bootstrap:${webjarsBootstrapVersion}")
+
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile("org.assertj:assertj-core:${assertjCoreVersion}")
+    testCompile("uk.org.fyodor:fyodor-core:${fyodorVersion}")
+    testCompile("uk.org.fyodor:fyodor-junit:${fyodorVersion}")
+    testCompile("uk.org.fyodor:fyodor-jodatime:${fyodorVersion}")
+    testCompile("com.github.fakemongo:fongo:${fongoVersion}")
+    testCompile("com.lordofthejars:nosqlunit-mongodb:${nosqlunitMongodbVersion}")
+    testCompile("com.jayway.jsonpath:json-path:${jsonPathVersion}")
+    testCompile("com.jayway.restassured:rest-assured:${restAssuredVersion}")
+    testCompile("org.scribe:scribe:${scribeVersion}")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = rootGradleVersion
+}

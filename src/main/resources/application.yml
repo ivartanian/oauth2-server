@@ -1,0 +1,10 @@
+mongo:
+  host: localhost
+  port: 27017
+  database: copyshare
+  username: dev
+  password: dev
+
+server:
+  port: 9000
+  contextPath: /sso
