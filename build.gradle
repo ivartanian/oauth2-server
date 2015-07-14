@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'war'
+apply plugin: 'application'
+apply plugin: 'docker'
 apply plugin: 'spring-boot'
 apply plugin: 'pl.allegro.tech.build.axion-release'
 
@@ -13,6 +14,7 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("pl.allegro.tech.build:axion-release-plugin:${axionReleasePluginVersion}")
+        classpath("se.transmode.gradle:gradle-docker:${dockerVersion}")
     }
 }
 
@@ -20,6 +22,8 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 group = 'uk.co.caeldev'
+
+mainClassName = 'uk.co.caeldev.oauthserver.Application'
 
 repositories {
   jcenter()
@@ -42,14 +46,32 @@ scmVersion {
 
 version = scmVersion.version
 
-war {
+jar {
     baseName = rootProject.name
     version = version
 }
 
-configurations {
-    providedRuntime
+docker {
+    maintainer = 'Adolfo Custidiano <adolfoecs@gmail.com>'
+    baseImage = 'java:7'
 }
+
+task buildDocker(type: Docker, dependsOn: build) {
+    push = true
+    applicationName = "${jar.baseName}"
+    tagVersion = "${jar.version}"
+    tag = "adolfoecs/${applicationName}"
+
+    runCommand("mkdir -p /opt/applications")
+
+    addFile("${buildDir}/distributions/${project.name}-${project.version}.tar", "/opt/applications/")
+
+    workingDir("/opt/applications/${project.name}-${project.version}/")
+
+    entryPoint(["bin/${project.name}"])
+
+}
+
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
@@ -68,7 +90,7 @@ dependencies {
     compile("uk.co.caeldev:spring-security-mongo:${springSecurityMongoVersion}")
     compile("org.webjars:bootstrap:${webjarsBootstrapVersion}")
 
-    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+    compile("org.springframework.boot:spring-boot-starter-tomcat")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.assertj:assertj-core:${assertjCoreVersion}")
