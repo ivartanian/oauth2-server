@@ -1,7 +1,7 @@
 mongo:
   host: localhost
   port: 27017
-  database: copyshare
+  database: oauth2
   username: dev
   password: dev
 
