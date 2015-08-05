@@ -72,7 +72,6 @@ task buildDocker(type: Docker, dependsOn: build) {
 
 }
 
-
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-aop")
@@ -85,6 +84,8 @@ dependencies {
     compile("org.springframework.security:spring-security-jwt")
     compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity3")
 
+    compile("org.springframework.boot:spring-boot-starter-tomcat")
+
     compile("com.google.guava:guava:${guavaVersion}")
     compile("org.springframework.security.oauth:spring-security-oauth2:${springSecurityOauth2Version}")
     compile("com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}")
@@ -92,7 +93,6 @@ dependencies {
     compile("uk.co.caeldev:spring-security-mongo:${springSecurityMongoVersion}")
     compile("org.webjars:bootstrap:${webjarsBootstrapVersion}")
 
-    compile("org.springframework.boot:spring-boot-starter-tomcat")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.assertj:assertj-core:${assertjCoreVersion}")
