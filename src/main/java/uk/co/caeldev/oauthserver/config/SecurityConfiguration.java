@@ -5,9 +5,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import uk.co.caeldev.springsecuritymongo.MongoUserDetailsManager;
@@ -27,12 +29,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .requestMatchers().antMatchers("/", "/login", "/oauth/authorize", "/oauth/confirm_access")
                 .and()
-                .authorizeRequests().anyRequest().authenticated()
+                .authorizeRequests()
+                    .antMatchers("/", "/fonts/**").permitAll()
+                    .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login").failureUrl("/login").permitAll()
                 .and()
                 .logout().permitAll();
+    }
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring()
+                .antMatchers(
+                        "/fonts/**");
     }
 
     @Override
