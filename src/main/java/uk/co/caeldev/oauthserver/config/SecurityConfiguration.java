@@ -30,7 +30,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .requestMatchers().antMatchers("/", "/login", "/oauth/authorize", "/oauth/confirm_access")
                 .and()
                 .authorizeRequests()
-                    .antMatchers("/", "/fonts/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
                 .formLogin()
