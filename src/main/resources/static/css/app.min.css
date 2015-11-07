@@ -8,6 +8,9 @@ body {
 .text-primary {
   color: #fed136;
 }
+.text-white {
+  color: #ffffff;
+}
 p {
   font-size: 14px;
   line-height: 1.75;
@@ -194,13 +197,13 @@ section h2.section-heading {
   margin-top: 0;
   margin-bottom: 15px;
 }
-section h3.section-subheading {
+section h3.section-approval-message {
   font-size: 16px;
   font-family: "Droid Serif", "Helvetica Neue", Helvetica, Arial, sans-serif;
   text-transform: none;
   font-style: italic;
   font-weight: 400;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 }
 
 section#login {
@@ -257,6 +260,12 @@ section#login :-ms-input-placeholder {
   font-weight: 700;
   color: #bbbbbb;
 }
+
+section#login .submit-item {
+  margin: 0 0 15px;
+  right: 0;
+}
+
 section#login .text-danger {
   color: #e74c3c;
 }

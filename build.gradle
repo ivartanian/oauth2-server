@@ -91,7 +91,6 @@ dependencies {
     compile("com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}")
     compile("joda-time:joda-time:${jodaTimeVersion}")
     compile("uk.co.caeldev:spring-security-mongo:${springSecurityMongoVersion}")
-    compile("org.webjars:bootstrap:${webjarsBootstrapVersion}")
 
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
