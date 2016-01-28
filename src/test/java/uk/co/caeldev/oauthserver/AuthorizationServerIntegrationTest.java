@@ -159,7 +159,7 @@ public class AuthorizationServerIntegrationTest {
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .and()
-                .body("html.body.h1", containsString("OAuth Approval"));
+                .body("html.head.title", containsString("OAuth2 Authorization"));
     }
 
     @Test
