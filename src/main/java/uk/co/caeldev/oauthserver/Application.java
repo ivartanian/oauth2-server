@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
 @Configuration
-@ComponentScan(basePackages = {"uk.co.caeldev.springsecuritymongo", "uk.co.caeldev.oauthserver"})
+@ComponentScan(basePackages = {"uk.co.caeldev.springsecuritymongo", "uk.co.caeldev.spring.mvc", "uk.co.caeldev.oauthserver"})
 @EnableAutoConfiguration
 @EnableSpringDataWebSupport
 public class Application {

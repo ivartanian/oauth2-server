@@ -1,10 +1,10 @@
 package uk.co.caeldev.oauthserver.builders;
 
 import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import uk.co.caeldev.oauthserver.features.user.UserResource;
 import uk.co.caeldev.oauthserver.persisters.Persister;
 import uk.co.caeldev.springsecuritymongo.domain.User;
 
@@ -12,6 +12,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
+import static com.google.common.collect.FluentIterable.from;
 
 public class UserBuilder implements Builder<User> {
 
@@ -72,7 +74,7 @@ public class UserBuilder implements Builder<User> {
 
     public UserBuilder grantedAuthorities(String... grantedAuthorities) {
         List<String> grantedAuthoritiesString = Lists.newArrayList(grantedAuthorities);
-        this.grantedAuthorities = FluentIterable.from(grantedAuthoritiesString).transform(toGrantedAuthority()).toSet();
+        this.grantedAuthorities = from(grantedAuthoritiesString).transform(toGrantedAuthority()).toSet();
         return this;
     }
 
@@ -82,6 +84,28 @@ public class UserBuilder implements Builder<User> {
             @Override
             public GrantedAuthority apply(String input) {
                     return new SimpleGrantedAuthority(input);
+            }
+        };
+    }
+
+    public UserBuilder fromUserResource(UserResource userResource) {
+        this.username = userResource.getUsername();
+        this.password = userResource.getPassword();
+        this.grantedAuthorities = from(userResource.getAuthorities()).transform(toGrantedAuthorities()).toSet();
+        this.accountNonExpired = userResource.isAccountNonExpired();
+        this.accountNonLocked = userResource.isAccountNonLocked();
+        this.credentialsNonExpired = userResource.isCredentialsNonExpired();
+        this.enabled = userResource.isEnabled();
+        this.userUUID = UUID.fromString(userResource.getUserUUID());
+        return this;
+    }
+
+    private Function<String, GrantedAuthority> toGrantedAuthorities() {
+        return new Function<String, GrantedAuthority>() {
+            @Nullable
+            @Override
+            public GrantedAuthority apply(@Nullable String input) {
+                return new SimpleGrantedAuthority(input);
             }
         };
     }
